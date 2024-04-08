@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity ClockDivider is
-    Port (
+    port (
         CLK_50M : in std_logic;
         CLK_25M_BY_2_POW_N : out std_logic_vector(29 downto 0)
     );
