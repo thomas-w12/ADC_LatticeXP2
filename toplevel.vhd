@@ -13,7 +13,13 @@ entity top is
         led5 : out std_logic;
         led6 : out std_logic;
         led7 : out std_logic;
-        led8 : out std_logic
+        led8 : out std_logic;
+		data1: out std_logic;
+		data2: out std_logic;
+		data3: out std_logic;
+		data4: out std_logic;
+		shift_clk: out std_logic;
+		latch_clk: out std_logic
   	) ;
 end top; 
 
@@ -22,12 +28,36 @@ architecture arch of top is
 
     signal clk_divided : std_logic_vector(29 downto 0);  -- Signal to hold the divided clock value
 	
+	signal SEGMENT_BITS_1 : std_logic_vector(7 downto 0);
+	signal SEGMENT_BITS_2 : std_logic_vector(7 downto 0);
+	signal SEGMENT_BITS_3 : std_logic_vector(7 downto 0);
+	signal SEGMENT_BITS_4 : std_logic_vector(7 downto 0);
+	
 	--Definition der Komponente "clockdivider" (siehe ClockDivider.vhd)
 	component ClockDivider is
         port (
             CLK_50M : in std_logic;
             CLK_25M_BY_2_POW_N : out std_logic_vector(29 downto 0)
         );
+	end component; 
+	
+	
+	component ShiftRegisterHandler is
+		port (
+			CLK_781k25 : in std_logic;
+			--7 segement value
+			segment1_stream : in std_logic_vector(7 downto 0) := (others => '0');
+			segment2_stream : in std_logic_vector(7 downto 0) := (others => '0');
+			segment3_stream : in std_logic_vector(7 downto 0) := (others => '0');
+			segment4_stream : in std_logic_vector(7 downto 0) := (others => '0');
+			--7 segment io
+			segment1_data : out std_logic;
+			segment2_data : out std_logic;
+			segment3_data : out std_logic;
+			segment4_data : out std_logic;
+			shift_clk : out std_logic;
+			latch_clk : out std_logic
+		);
 	end component; 
 		
 begin
@@ -38,7 +68,23 @@ begin
         CLK_50M => clk,
         CLK_25M_BY_2_POW_N => clk_divided
 	  );
-
+	  
+	ShiftRegisterHandler1: ShiftRegisterHandler
+	port map (
+		CLK_781k25 => clk_divided(5),
+		segment1_data => data1,
+		segment2_data => data2,
+		segment3_data => data3,
+		segment4_data => data4,
+		shift_clk => shift_clk,
+		latch_clk => latch_clk,
+		segment1_stream => SEGMENT_BITS_1,
+		segment2_stream => SEGMENT_BITS_2,
+		segment3_stream => SEGMENT_BITS_3,
+		segment4_stream => SEGMENT_BITS_4
+	);
+	
+		
 
 	--Prozess wird von "clk" getriggert
     process(clk)

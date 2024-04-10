@@ -2,9 +2,18 @@
 <BaliProject version="3.2" title="ADC" device="LFXP2-5E-5TN144C" default_implementation="impl1">
     <Options/>
     <Implementation title="impl1" dir="impl1" description="impl1" synthesis="lse" default_strategy="Strategy1">
-        <Options def_top="ClockDivider"/>
+        <Options def_top="SegmentTest" top="top"/>
         <Source name="ClockDivider.vhd" type="VHDL" type_short="VHDL">
-            <Options top_module="ClockDivider"/>
+            <Options/>
+        </Source>
+        <Source name="toplevel.vhd" type="VHDL" type_short="VHDL">
+            <Options top_module="top"/>
+        </Source>
+        <Source name="ShiftRegisterHandler.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
+        </Source>
+        <Source name="SegmentTest.vhd" type="VHDL" type_short="VHDL">
+            <Options/>
         </Source>
         <Source name="ADC.lpf" type="Logic Preference" type_short="LPF">
             <Options/>
