@@ -25,3 +25,8 @@ LOCATE COMP "data2" SITE "101" ;
 LOCATE COMP "data1" SITE "100" ;
 LOCATE COMP "shift_clk" SITE "98" ;
 LOCATE COMP "latch_clk" SITE "96" ;
+LOCATE COMP "button_sw2" SITE "19" ;
+LOCATE COMP "dip_switch_1" SITE "58" ;
+LOCATE COMP "dip_switch_2" SITE "57" ;
+LOCATE COMP "dip_switch_3" SITE "56" ;
+LOCATE COMP "dip_switch_4" SITE "55" ;
