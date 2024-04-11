@@ -19,15 +19,15 @@ begin
     process(ENABLE)
     begin
         if (ENABLE = '1') then
-            SEGMENT_BITS_1 <= "00000000";
-			SEGMENT_BITS_2 <= "00000000";
-			SEGMENT_BITS_3 <= "00000000";
-			SEGMENT_BITS_4 <= "00000000";
+            SEGMENT_BITS_1 <= "00000000"; -- 0
+			SEGMENT_BITS_2 <= "00000000"; -- 0
+			SEGMENT_BITS_3 <= "00000000"; -- 0
+			SEGMENT_BITS_4 <= "00000000"; -- 0
         else
-			SEGMENT_BITS_1 <= "11000100";
-			SEGMENT_BITS_2 <= "00101111";
-			SEGMENT_BITS_3 <= "10001111";
-			SEGMENT_BITS_4 <= "10011100";
+			SEGMENT_BITS_1 <= "11000100"; -- 1
+			SEGMENT_BITS_2 <= "00101111"; -- 2 
+			SEGMENT_BITS_3 <= "10001111"; -- 3
+			SEGMENT_BITS_4 <= "10011100"; -- 4
 		end if;
     end process;
 end Behavioral;

@@ -20,7 +20,7 @@ begin
             counter <= counter + 1;
             if counter >= 2 then
                 counter <= 0;
-                out_count <= out_count - "1";
+                out_count <= out_count - "1"; -- Decrement by 1 because LEDs are active low
             end if;
         end if;
     end process;

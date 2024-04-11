@@ -3,10 +3,14 @@ use ieee.std_logic_1164.all ;
 use ieee.numeric_std.all ;
 
 entity top is
-	-- Definition der hardwaremäßige Ein- und Ausgänge am FPGA
+	-- Definition of the ports of the hardware FPGA
 	port (
 		clk : in std_logic;
-		button1: in std_logic;
+		button_sw2: in std_logic;
+		dip_switch_1: in std_logic;
+		dip_switch_2: in std_logic;
+		dip_switch_3: in std_logic;
+		dip_switch_4: in std_logic;
 		led1 : out std_logic;
 		led2 : out std_logic;
         led3 : out std_logic;
@@ -33,8 +37,10 @@ architecture arch of top is
 	signal SEGMENT_BITS_2 : std_logic_vector(7 downto 0);
 	signal SEGMENT_BITS_3 : std_logic_vector(7 downto 0);
 	signal SEGMENT_BITS_4 : std_logic_vector(7 downto 0);
+
+	signal SEGMENT_VALUE: std_logic_vector(3 downto 0); -- Signal to hold the 7 segment value in binary
 	
-	--Definition der Komponente "clockdivider" (siehe ClockDivider.vhd)
+	-- Definition of the component "ClockDivider"
 	component ClockDivider is
         port (
             CLK_50M : in std_logic;
@@ -42,7 +48,7 @@ architecture arch of top is
         );
 	end component; 
 	
-	
+	-- Definition of the component "ShiftRegisterHandler"
 	component ShiftRegisterHandler is
 		port (
 			CLK_781k25 : in std_logic;
@@ -56,11 +62,13 @@ architecture arch of top is
 			segment2_data : out std_logic;
 			segment3_data : out std_logic;
 			segment4_data : out std_logic;
+			--shift register control
 			shift_clk : out std_logic;
 			latch_clk : out std_logic
 		);
 	end component; 
 	
+	-- Definition of the component "SegmentTest"
 	component SegmentTest is
         port (
 			ENABLE : in std_logic;
@@ -70,16 +78,26 @@ architecture arch of top is
 			SEGMENT_BITS_4 : out std_logic_vector(7 downto 0)
         );
 	end component; 
+	
+	-- Definition of the component "SegmentDecoder"
+	component SegmentDecoder is
+        port (
+			DOT : in std_logic;
+			SEGMENT_VALUE : in std_logic_vector(3 downto 0);
+			SEGMENT_BITS : out std_logic_vector(7 downto 0)
+        );
+	end component; 
 		
 begin
 		
-	--Instanz der Komponente "Clockdivider" zeugen
+	-- Initialize clock divider component
 	ClockDivider1: ClockDivider 
 	port map (
         CLK_50M => clk,
         CLK_25M_BY_2_POW_N => clk_divided
 	  );
 	  
+	-- Initialize shift register handler component
 	ShiftRegisterHandler1: ShiftRegisterHandler
 	port map (
 		CLK_781k25 => clk_divided(5),
@@ -95,17 +113,26 @@ begin
 		segment4_stream => SEGMENT_BITS_4
 	);
 	
-	SegmentTest1: SegmentTest
+	-- Initialize segment test component
+	-- SegmentTest1: SegmentTest
+	-- port map (
+	-- 	ENABLE => button_sw2,
+	-- 	SEGMENT_BITS_1 => SEGMENT_BITS_1,
+	-- 	SEGMENT_BITS_2 => SEGMENT_BITS_2,
+	-- 	SEGMENT_BITS_3 => SEGMENT_BITS_3,
+	-- 	SEGMENT_BITS_4 => SEGMENT_BITS_4
+	-- );
+	
+	-- Initialize segment decoder component
+	SegmentDecoder1: SegmentDecoder
 	port map (
-		ENABLE => button1,
-		SEGMENT_BITS_1 => SEGMENT_BITS_1,
-		SEGMENT_BITS_2 => SEGMENT_BITS_2,
-		SEGMENT_BITS_3 => SEGMENT_BITS_3,
-		SEGMENT_BITS_4 => SEGMENT_BITS_4
+		DOT => not button_sw2,
+		SEGMENT_BITS => SEGMENT_BITS_1,
+		SEGMENT_VALUE => SEGMENT_VALUE
 	);
 		
 
-	--Prozess wird von "clk" getriggert
+	-- Assign the divided clock to the LEDs
     process(clk)
     begin
         if rising_edge(clk) then
@@ -120,5 +147,11 @@ begin
         end if;
 
     end process; 
+
+	-- Assign the dip switches to the 7 segment value
+	SEGMENT_VALUE(0) <= dip_switch_1;
+	SEGMENT_VALUE(1) <= dip_switch_2;
+	SEGMENT_VALUE(2) <= dip_switch_3;
+	SEGMENT_VALUE(3) <= dip_switch_4;
 
 end architecture;
