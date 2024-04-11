@@ -6,6 +6,7 @@ entity top is
 	-- Definition der hardwaremäßige Ein- und Ausgänge am FPGA
 	port (
 		clk : in std_logic;
+		button1: in std_logic;
 		led1 : out std_logic;
 		led2 : out std_logic;
         led3 : out std_logic;
@@ -59,10 +60,20 @@ architecture arch of top is
 			latch_clk : out std_logic
 		);
 	end component; 
+	
+	component SegmentTest is
+        port (
+			ENABLE : in std_logic;
+			SEGMENT_BITS_1 : out std_logic_vector(7 downto 0);
+			SEGMENT_BITS_2 : out std_logic_vector(7 downto 0);
+			SEGMENT_BITS_3 : out std_logic_vector(7 downto 0);
+			SEGMENT_BITS_4 : out std_logic_vector(7 downto 0)
+        );
+	end component; 
 		
 begin
 		
-	--Instanz der Komponente "module" erzeugen
+	--Instanz der Komponente "Clockdivider" zeugen
 	ClockDivider1: ClockDivider 
 	port map (
         CLK_50M => clk,
@@ -84,6 +95,14 @@ begin
 		segment4_stream => SEGMENT_BITS_4
 	);
 	
+	SegmentTest1: SegmentTest
+	port map (
+		ENABLE => button1,
+		SEGMENT_BITS_1 => SEGMENT_BITS_1,
+		SEGMENT_BITS_2 => SEGMENT_BITS_2,
+		SEGMENT_BITS_3 => SEGMENT_BITS_3,
+		SEGMENT_BITS_4 => SEGMENT_BITS_4
+	);
 		
 
 	--Prozess wird von "clk" getriggert
