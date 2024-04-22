@@ -8,7 +8,7 @@ entity top is
 		clk : in std_logic;
 		
 		-- 7 segment
-		button_sw2: in std_logic;
+		-- button_sw2: in std_logic;
 		-- dip_switch_1: in std_logic;
 		-- dip_switch_2: in std_logic;
 		-- dip_switch_3: in std_logic;
@@ -29,7 +29,7 @@ entity top is
 		latch_clk: out std_logic;
 		
 		-- ADC
-		DAC_OUT : out std_logic_vector(0 to 11);
+		DAC_OUT : out std_logic_vector(11 downto 0);
 		sample_hold : out std_logic;
 		comparator : in std_logic
 	);
@@ -161,7 +161,7 @@ begin
 	-- Initialize segment decoder 1 component
 	SegmentDecoder1: SegmentDecoder
 	port map (
-		DOT => not button_sw2,
+		DOT => '1',
 		SEGMENT_BITS => SEGMENT_BITS_1,
 		SEGMENT_VALUE => SEGMENT_VALUE_1
 	);
@@ -169,7 +169,7 @@ begin
 	-- Initialize segment decoder 2 component
 	SegmentDecoder2: SegmentDecoder
 	port map (
-		DOT => not button_sw2,
+		DOT => '0',
 		SEGMENT_BITS => SEGMENT_BITS_2,
 		SEGMENT_VALUE => SEGMENT_VALUE_2
 	);
@@ -177,7 +177,7 @@ begin
 	-- Initialize segment decoder 3 component
 	SegmentDecoder3: SegmentDecoder
 	port map (
-		DOT => not button_sw2,
+		DOT => '0',
 		SEGMENT_BITS => SEGMENT_BITS_3,
 		SEGMENT_VALUE => SEGMENT_VALUE_3
 	);
@@ -185,7 +185,7 @@ begin
 	-- Initialize segment decoder 4 component
 	SegmentDecoder4: SegmentDecoder
 	port map (
-		DOT => not button_sw2,
+		DOT => '0',
 		SEGMENT_BITS => SEGMENT_BITS_4,
 		SEGMENT_VALUE => SEGMENT_VALUE_4
 	);
