@@ -50,7 +50,7 @@ architecture arch of top is
 	signal SEGMENT_VALUE_3: std_logic_vector(3 downto 0); -- Signal to hold the 7 segment value in binary
 	signal SEGMENT_VALUE_4: std_logic_vector(3 downto 0); -- Signal to hold the 7 segment value in binary
 	
-	signal ADC_RESULT : std_logic_vector(0 to 11);
+	signal ADC_RESULT : std_logic_vector(11 downto 0);
 			
 	-- Definition of the component "ClockDivider"
 	component ClockDivider is
@@ -117,9 +117,9 @@ architecture arch of top is
 		port (
 			CLK : in std_logic;  -- clock for DAC
 			COMPARATOR : in std_logic; -- result comparator
-			DAC_VALUE : out std_logic_vector(0 to 11); -- current value DAC which is compared to the value which we want to measure
+			DAC_VALUE : out std_logic_vector(11 downto 0); -- current value DAC which is compared to the value which we want to measure
 			SAMPLE_HOLD : out std_logic; -- connect to sample and hold switch of ADC
-			ADC_RESULT : out std_logic_vector(0 to 11)  -- ADC-result
+			ADC_RESULT : out std_logic_vector(11 downto 0)  -- ADC-result
 		);
 	end component;
 		
